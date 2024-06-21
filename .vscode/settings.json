@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "unistd.h": "c",
-        "stb_image.h": "c",
-        "amxint8intrin.h": "c",
-        "exif-data.h": "c",
-        "stdio.h": "c"
-    }
-}
