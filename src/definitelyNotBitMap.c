@@ -76,14 +76,6 @@ int getPNGDimensions(FILE *image, int32_t *width, int32_t *height) {
 
 unsigned char *loadImage(FILE *image, definitelyNotBitMapHeader *header) {
     uint16_t MAGIC_SIGN[] = {0x0D42, 0x0A55, 0x0afe, 0x043b, 0x0111, 0x0d34, 0x01bb, 0x0fff};
-    // if (memcmp(header->magic, MAGIC_SIGN, 8 * sizeof(uint16_t)) != 0) {
-    //     fprintf(stderr, "Wrong sign.\n");
-    //     return NULL;
-    // }
-
-    for (int i = 0; i < 8; i++) {
-        printf("Sign: %i  Sign: %i\n", header->magic[i], MAGIC_SIGN[i]);
-    }
 
     unsigned char *imageData = calloc(header->width * header->height * 4, sizeof(char));
 

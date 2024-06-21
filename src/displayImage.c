@@ -71,6 +71,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(renderer);
+
     for (int32_t y = 0; y < header.height; ++y) {
         for (int32_t x = 0; x < header.width; ++x) {
             int pixel = (y * header.width + x) * 4;
