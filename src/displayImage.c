@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Create window
-    SDL_Window* window = SDL_CreateWindow("SDL App Skeleton",
+    SDL_Window* window = SDL_CreateWindow("CIF image viewer",
                                           SDL_WINDOWPOS_UNDEFINED,
                                           SDL_WINDOWPOS_UNDEFINED,
                                           header.width, header.height,
