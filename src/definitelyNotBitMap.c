@@ -4,8 +4,13 @@
 #include <png.h>
 #include <stdio.h>
 #include <string.h>
+#include <stb/stb_image.h>
 
-int getJPEGDimensions(FILE *image, uint32_t *width, uint32_t *height) {
+int getJPEGDimensions(FILE *image, int32_t *width, int32_t *height) {
+    if (image == NULL || width == NULL || height == NULL) {
+        fprintf(stderr, "Error: one of the parameters is NULL\n");
+        return 1;
+    }
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
 
@@ -15,14 +20,19 @@ int getJPEGDimensions(FILE *image, uint32_t *width, uint32_t *height) {
     jpeg_read_header(&cinfo, TRUE);
 
     jpeg_start_decompress(&cinfo);
+    *width = cinfo.output_width;
+    *height = cinfo.output_height;
 
-    JSAMPARRAY row_pointer = (*cinfo.mem->alloc_sarray)((j_common_ptr)&cinfo, JPOOL_IMAGE, cinfo.output_width, 1);
+    *width = cinfo.output_width;
+    *height = cinfo.output_height;
+    int row_stride = cinfo.output_width * cinfo.output_components;
 
-    memcpy(width, &cinfo.output_width, sizeof(uint32_t));
-    memcpy(height, &cinfo.output_height, sizeof(uint32_t));
+    JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)
+        ((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
 
+    // Read scanlines one by one
     while (cinfo.output_scanline < cinfo.output_height) {
-        jpeg_read_scanlines(&cinfo, row_pointer, 1);
+        jpeg_read_scanlines(&cinfo, buffer, 1);
     }
 
     jpeg_finish_decompress(&cinfo);
@@ -30,7 +40,7 @@ int getJPEGDimensions(FILE *image, uint32_t *width, uint32_t *height) {
     return 0;
 }
 
-int getPNGDimensions(FILE *image, uint32_t *width, uint32_t *height) {
+int getPNGDimensions(FILE *image, int32_t *width, int32_t *height) {
 
     png_structp png_ptr;
     png_infop info_ptr;
@@ -61,4 +71,23 @@ int getPNGDimensions(FILE *image, uint32_t *width, uint32_t *height) {
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 
     return 0;
+}
+
+
+unsigned char *loadImage(FILE *image, definitelyNotBitMapHeader *header) {
+    uint16_t MAGIC_SIGN[] = {0x0D42, 0x0A55, 0x0afe, 0x043b, 0x0111, 0x0d34, 0x01bb, 0x0fff};
+    // if (memcmp(header->magic, MAGIC_SIGN, 8 * sizeof(uint16_t)) != 0) {
+    //     fprintf(stderr, "Wrong sign.\n");
+    //     return NULL;
+    // }
+
+    for (int i = 0; i < 8; i++) {
+        printf("Sign: %i  Sign: %i\n", header->magic[i], MAGIC_SIGN[i]);
+    }
+
+    unsigned char *imageData = calloc(header->width * header->height * 4, sizeof(char));
+
+    fread(imageData, header->width * header->height * 4, 1, image);
+
+    return imageData;
 }

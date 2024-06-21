@@ -3,7 +3,8 @@
 #include <png.h>
 #include <string.h>
 #include "definitelyNotBitMap.h"
-#include <stb/stb.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -16,13 +17,18 @@ int main(int argc, char *argv[]) {
     }
 
     FILE *image = fopen(argv[1], "rb");
-    int output = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    FILE *output = fopen(argv[2], "wb");
     if (!image) {
         fprintf(stderr, "Error opening image file.\n");
         return 1;
     }
+    if (!output) {
+        fprintf(stderr, "Error opening output file.\n");
+        fclose(image);
+        return 1;
+    }
 
-    uint32_t width, height;
+    int32_t width, height;
 
     char *fileExtension = &argv[1][strlen(argv[1]) - 4];
 
@@ -38,15 +44,30 @@ int main(int argc, char *argv[]) {
     }
 
     definitelyNotBitMapHeader header = {
-        .magic = {0x4D42, 0xAA55, 0xcafe, 0x443b, 0x0111, 0x0d34, 0x11bb, 0xffff},
+        .magic = {0x0D42, 0x0A55, 0x0afe, 0x043b, 0x0111, 0x0d34, 0x01bb, 0x0fff},
         .width = width,
         .height = height,
+        .channels = 4,
         .depth = 24 // assume true color depth for now. TODO: implement proper depth detection
     };
     
-    write(output, &header, sizeof(definitelyNotBitMapHeader));
+    fwrite(&header, sizeof(header), 1, output);
+
+    unsigned char *imageData = stbi_load(argv[1], &width, &height, NULL, 4);
+
+    if (imageData == NULL) {
+        fprintf(stderr, "Error loading image: %s\n", stbi_failure_reason());
+        fclose(image);
+        fclose(output);
+        return 1;
+    }
+
+    fwrite(imageData, width * height * 4, 1, output);
     
+    stbi_image_free(imageData);
+
     fclose(image);
+    fclose(output);
 
     return 0;
 }
