@@ -75,8 +75,6 @@ int getPNGDimensions(FILE *image, int32_t *width, int32_t *height) {
 
 
 unsigned char *loadImage(FILE *image, definitelyNotBitMapHeader *header) {
-    uint16_t MAGIC_SIGN[] = {0x0D42, 0x0A55, 0x0afe, 0x043b, 0x0111, 0x0d34, 0x01bb, 0x0fff};
-
     unsigned char *imageData = calloc(header->width * header->height * 4, sizeof(char));
 
     fread(imageData, header->width * header->height * 4, 1, image);
