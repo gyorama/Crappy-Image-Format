@@ -8,12 +8,21 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <lzma.h>
 
 int main(int argc, char *argv[]) {
+
+    int channels = 4;
 
     if (argc < 3) {
         fprintf(stderr, "Usage: %s <input_image> <output_image>\n", argv[0]);
         return 1;
+    } else if (argc > 3) {
+        for (int i = 3; i < argc; i++) {
+            if (strcmp(argv[i], "--no-alpha-channel") == 0) {
+                channels = 3;
+            }
+        }
     }
 
     FILE *image = fopen(argv[1], "rb");
@@ -47,13 +56,11 @@ int main(int argc, char *argv[]) {
         .magic = {0x0D42, 0x0A55, 0x0afe, 0x043b, 0x0111, 0x0d34, 0x01bb, 0x0fff},
         .width = width,
         .height = height,
-        .channels = 4,
+        .channels = channels,
         .depth = 24 // assume true color depth for now. TODO: implement proper depth detection
     };
-    
-    fwrite(&header, sizeof(header), 1, output);
 
-    unsigned char *imageData = stbi_load(argv[1], &width, &height, NULL, 4);
+    unsigned char *imageData = stbi_load(argv[1], &width, &height, NULL, channels);
 
     if (imageData == NULL) {
         fprintf(stderr, "Error loading image: %s\n", stbi_failure_reason());
@@ -62,6 +69,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    fwrite(&header, sizeof(header), 1, output);
     fwrite(imageData, width * height * 4, 1, output);
     
     stbi_image_free(imageData);

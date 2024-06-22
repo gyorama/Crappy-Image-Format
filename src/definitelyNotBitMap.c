@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stb/stb_image.h>
+#include <lzma.h>
 
 int getJPEGDimensions(FILE *image, int32_t *width, int32_t *height) {
     if (image == NULL || width == NULL || height == NULL) {

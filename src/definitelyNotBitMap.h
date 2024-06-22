@@ -17,5 +17,6 @@ typedef struct definitelyNotBitMap {
 int getJPEGDimensions(FILE *image, int32_t *width, int32_t *height);
 int getPNGDimensions(FILE *image, int32_t *width, int32_t *height);
 unsigned char *loadImage(FILE *image, definitelyNotBitMapHeader *header);
+void compressData(FILE *input, FILE* output);
 
 #endif
