@@ -78,8 +78,8 @@ int main(int argc, char *argv[]) {
 
     for (int32_t y = 0; y < header.height; ++y) {
         for (int32_t x = 0; x < header.width; ++x) {
-            int pixel = (y * header.width + x) * 4;
-            SDL_SetRenderDrawColor(renderer, imageData[pixel], imageData[pixel + 1], imageData[pixel + 2], imageData[pixel + 3]);
+            int pixel = (y * header.width + x) * header.channels;
+            SDL_SetRenderDrawColor(renderer, imageData[pixel], imageData[pixel + 1], imageData[pixel + 2], (header.channels == 4) ? imageData[pixel + 3] : SDL_ALPHA_OPAQUE);
             SDL_RenderDrawPoint(renderer, x, y);
         }
     }
