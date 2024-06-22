@@ -19,7 +19,12 @@ int main(int argc, char *argv[]) {
         return 1;
     } else if (argc > 3) {
         for (int i = 3; i < argc; i++) {
-            if (strcmp(argv[i], "--no-alpha-channel") == 0) {
+            if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+            	puts("Usage: pnjpg2cif <input_image> <output_image>\n\n
+            		 "Options:\n-h ; --help  |  print this and exit\n
+            		 "--no-alpha-channel  |  do not include the alpha channel in the output image (no transparency)");
+                return 0;
+            } else if (strcmp(argv[i], "--no-alpha-channel") == 0) {
                 channels = 3;
             }
         }
