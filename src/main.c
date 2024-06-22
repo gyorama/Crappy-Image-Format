@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
     }
 
     fwrite(&header, sizeof(header), 1, output);
-    fwrite(imageData, width * height * 4, 1, output);
+    fwrite(imageData, width * height * channels, 1, output);
     
     stbi_image_free(imageData);
 
