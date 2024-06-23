@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
     } else if (argc > 3) {
         for (int i = 3; i < argc; i++) {
             if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-            	puts("Usage: pnjpg2cif <input_image> <output_image>\n\n
-            		 "Options:\n-h ; --help  |  print this and exit\n
+            	puts("Usage: pnjpg2cif <input_image> <output_image>\n\n"
+            		 "Options:\n-h ; --help  |  print this and exit\n"
             		 "--no-alpha-channel  |  do not include the alpha channel in the output image (no transparency)");
                 return 0;
             } else if (strcmp(argv[i], "--no-alpha-channel") == 0) {
@@ -50,6 +50,8 @@ int main(int argc, char *argv[]) {
         getJPEGDimensions(image, &width, &height);
     } else if (strcmp(fileExtension, ".png") == 0) {
         getPNGDimensions(image, &width, &height);
+    } else if (strcmp(fileExtension, ".bmp") == 0) {
+        getBMPdata(image, &width, &height);
     } else {
         fprintf(stderr, "Unsupported image format.\n"
                         "Try to change the file extension to '.jpg'"
@@ -64,8 +66,8 @@ int main(int argc, char *argv[]) {
         .channels = channels,
         .depth = 24 // assume true color depth for now. TODO: implement proper depth detection
     };
-
-    unsigned char *imageData = stbi_load(argv[1], &width, &height, NULL, channels);
+    
+    unsigned char *imageData = stbi_load(argv[1], &header.width, &header.height, NULL, channels);
 
     if (imageData == NULL) {
         fprintf(stderr, "Error loading image: %s\n", stbi_failure_reason());
