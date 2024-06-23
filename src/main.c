@@ -18,13 +18,12 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Usage: %s <flags> ? (<input_image> <output_image>)\n", argv[0]);
         return 1;
     } else if (argc >= 2) {
-        for (int i = 2; i < argc; i++) {
+        for (int i = 1; i < argc; i++) {
             if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             	puts("Usage: pnjpg2cif <input_image> <output_image>\n\n"
             		 "Options:\n-h ; --help  |  print this and exit\n"
             		 "--no-alpha-channel  |  do not include the alpha channel in the output image (no transparency)"
-                     "-v ; --version  |  print version and exit\n"
-                     "--depth <value>  |  set the color depth in bytes (default: 3)\n");
+                     "-v ; --version      |  print version and exit\n");
                 return 0;
             } else if (strcmp(argv[i], "--no-alpha-channel") == 0) {
                 channels = 3;
