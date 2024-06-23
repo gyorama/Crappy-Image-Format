@@ -23,14 +23,17 @@ int main(int argc, char *argv[]) {
             	puts("Usage: pnjpg2cif <input_image> <output_image>\n\n"
             		 "Options:\n-h ; --help  |  print this and exit\n"
             		 "--no-alpha-channel  |  do not include the alpha channel in the output image (no transparency)"
-                     "-v ; --version      |  print version and exit\n");
+                     "-v ; --version      |  print version and exit\n"
+                     "--greyscale  ; --grayscale |  convert to greyscale\n");
                 return 0;
             } else if (strcmp(argv[i], "--no-alpha-channel") == 0) {
                 channels = 3;
             } else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
                 puts("pnjpg2cif version 1.0");
                 return 0;
-            }            
+            } else if (strcmp(argv[i], "--greyscale") == 0 || strcmp(argv[i], "-grayscale") == 0) {
+                channels = 1;
+            }
         }
     }
 
