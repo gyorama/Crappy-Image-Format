@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <lzma.h>
 
 int main(int argc, char *argv[]) {
 

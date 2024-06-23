@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdbool.h>
-#include <lzma.h>
 
 int main(int argc, char *argv[]) {
 
