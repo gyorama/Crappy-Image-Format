@@ -73,23 +73,7 @@ int getPNGDimensions(FILE *image, int32_t *width, int32_t *height) {
     return 0;
 }
 
-
-void getBMPdata(FILE *image, int32_t *width, int32_t *height) {
-    BitMapHeader header;
-    fread(&header, sizeof(BitMapHeader), 1, image);
-    width = &header.width;
-    height = &header.height;
-}
-
 unsigned char *loadImage(FILE *image, definitelyNotBitMapHeader *header) {
-    unsigned char *imageData = calloc(header->width * header->height * header->channels, sizeof(char));
-
-    fread(imageData, header->width * header->height * header->channels, 1, image);
-
-    return imageData;
-}
-
-unsigned char *loadBitmap(FILE *image, BitMapHeader *header) {
     unsigned char *imageData = calloc(header->width * header->height * header->channels, sizeof(char));
 
     fread(imageData, header->width * header->height * header->channels, 1, image);
